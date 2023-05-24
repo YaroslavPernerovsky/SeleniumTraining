@@ -55,9 +55,9 @@ public class CssValuesTest
         Console.WriteLine("CR font-family: " + crtext.GetCssValue("font-family"));
         Console.WriteLine("SF font-family: " + sftext.GetCssValue("font-family"));
 
-        Console.WriteLine("FF font-weight: " + fftext.GetCssValue("font-weight"));
-        Console.WriteLine("CR font-weight: " + crtext.GetCssValue("font-weight"));
-        Console.WriteLine("SF font-weight: " + sftext.GetCssValue("font-weight"));
+        Console.WriteLine("FF color-scheme: " + fftext.GetCssValue("color-scheme"));
+        Console.WriteLine("CR color-scheme: " + crtext.GetCssValue("color-scheme"));
+        Console.WriteLine("SF color-scheme: " + sftext.GetCssValue("color-scheme"));
     }
 
     private string DemoHtmlUrl()
