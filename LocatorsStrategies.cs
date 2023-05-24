@@ -9,7 +9,7 @@ public class LocatorsStrategies : BaseTest
     [SetUp]
     public void OpenDemoHtml()
     {
-        drv.Navigate().GoToUrl("file://" + Path.Combine(Environment.CurrentDirectory, @"Resources\", "Examples.html"));
+        drv.Navigate().GoToUrl(DemoHtmlUrl());
     }
 
     [Test]
