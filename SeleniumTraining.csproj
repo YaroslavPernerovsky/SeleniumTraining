@@ -25,6 +25,13 @@
 
   <ItemGroup>
     <None Include="bin\Debug\net7.0\Examples.html" />
+    <None Update="Resources\Examples.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>

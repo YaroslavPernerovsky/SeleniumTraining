@@ -6,6 +6,71 @@
 </head>
 <body>
 
+<input id="text" myAttribute="super"/> <br>
+<br>
+<input id="file" type="file"/> <br>
+<br>
+<a href="/test/test.html" id="link">Link</a> <br>
+
+<br> Name222 <br><input class="salary_data"/><br><br>
+
+<label> Currency Selector
+    <select data-size="medium" name="currency_code">
+        <option value="">-- Select --</option>
+        <option data-decimals="2" data-value="1" selected="selected" value="USD">US Dollars</option>
+        <option data-decimals="2" data-value="0.726" value="EUR">Euros</option>
+        <option data-decimals="2" data-value="28" value="UAH">UA Hrivhas</option>
+    </select>
+</label>
+
+<br>
+
+<div id="div">
+    <p id="invisible" style="opacity: 0">Text Inside The Invisible Element</p>
+    <p style="opacity: 0.02">Almost Invisible Element</p>
+    <p>Visible Element</p>
+    <pre id="spacespre">Text 
+           with
+             a   
+           lot               of             spaces</pre>
+    <p id="spaces"> Text with
+        a
+        lot
+        of
+        spaces
+        and other
+
+        free things
+    </p>
+</div>
+
+<p class="css" id="color">Super CSS Text</p>
+
+<style>
+    p.css {
+        font-family: verdana;
+        font-size: 20px;
+        background-color: lightblue;
+        color: white;
+    }
+
+</style>
+
+<input id="alert" onclick="prompt('Hello World!')" type="button" value="Click Me!">
+
+<br>
+<br>
+
+<form>
+    Name <br><input class="salary_data"/><br><br>
+    Age <br> <input class="salary_data"/> <br><br>
+    City <br> <input class="salary_data"/> <br><br>
+    Year<br> <input class="salary_data"/> <br><br>
+    Something<br> <input class="salary_data"/> <br><br>
+    Salary <br> <input class="salary_data"/> <br> <br>
+    Occupation<br> <input class="salary_data"/> <br><br>
+</form>
+
 
 <form id="first" style="border: 2px solid red; margin: 5px; padding: 5px; width: 400px;">
     <label>Login
@@ -45,7 +110,7 @@
 <br>
 <br>
 <br>
-<table id ="table">
+<table id="table">
     <thead>
     <tr>
         <th>Name</th>
@@ -55,11 +120,11 @@
         <th>Phone</th>
         <th>Header 6</th>
         <th>Header 7</th>
-      
+
     </tr>
     </thead>
     <tbody>
-    
+
     <!-- Table rows -->
     <tr>
         <td class="username">Andriy</td>
@@ -111,7 +176,8 @@
 
 <style>
     td {
-        border: 2px solid forestgreen; padding: 5px;
+        border: 2px solid forestgreen;
+        padding: 5px;
     }
 </style>
 

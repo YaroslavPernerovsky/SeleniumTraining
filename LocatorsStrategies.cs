@@ -1,27 +1,16 @@
 using System.Collections.ObjectModel;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 
 namespace SeleniumTraining;
 
 [TestFixture]
-public class LocatorsStrategies
+public class LocatorsStrategies : BaseTest
 {
-    [OneTimeSetUp]
-    public void Setup()
+    [SetUp]
+    public void OpenDemoHtml()
     {
-        drv = new ChromeDriver();
-        drv.Navigate().GoToUrl("file://" + Directory.GetCurrentDirectory() + "/Examples.html");
+        drv.Navigate().GoToUrl("file://" + Path.Combine(Environment.CurrentDirectory, @"Resources\", "Examples.html"));
     }
-
-    [OneTimeTearDown]
-    public void ShutDown()
-    {
-        drv.Quit();
-    }
-
-    private IWebDriver drv;
-
 
     [Test]
     public void RelativeSearchTests()
