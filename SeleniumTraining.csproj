@@ -19,4 +19,12 @@
     <PackageReference Include="Selenium.WebDriver" Version="4.9.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="bin\Debug\net7.0\SeleniumTraining.deps.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bin\Debug\net7.0\Examples.html" />
+  </ItemGroup>
+
 </Project>
