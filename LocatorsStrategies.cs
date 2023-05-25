@@ -67,11 +67,11 @@ public class LocatorsStrategies : BaseTest
         var links = (ReadOnlyCollection<IWebElement>)jsExecutor.ExecuteScript(
             " return document.getElementsByClassName('username')");
 
-        foreach (var link in links) Console.WriteLine("Address: " + link.Text);
+        foreach (var link in links) Console.WriteLine("Name in HTML table: " + link.Text);
     }
 
 
-    private void FillDefaultValues(IWebElement form)
+    private static void FillDefaultValues(ISearchContext form)
     {
         form.FindElement(By.Name("login")).SendKeys("This is login");
         form.FindElement(By.Name("password")).SendKeys("This is password");

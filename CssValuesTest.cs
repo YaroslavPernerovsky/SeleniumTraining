@@ -15,9 +15,9 @@ public class CssValuesTest
         cr = new ChromeDriver();
         sf = new SafariDriver();
 
-        ff.Navigate().GoToUrl(DemoHtmlUrl());
-        cr.Navigate().GoToUrl(DemoHtmlUrl());
-        sf.Navigate().GoToUrl(DemoHtmlUrl());
+        ff.Navigate().GoToUrl(BaseTest.DemoHtmlUrl());
+        cr.Navigate().GoToUrl(BaseTest.DemoHtmlUrl());
+        sf.Navigate().GoToUrl(BaseTest.DemoHtmlUrl());
     }
 
     [TearDown]
@@ -60,8 +60,4 @@ public class CssValuesTest
         Console.WriteLine("SF color-scheme: " + sftext.GetCssValue("color-scheme"));
     }
 
-    private string DemoHtmlUrl()
-    {
-        return "file://" + Path.Combine(Environment.CurrentDirectory, @"Resources\", "Examples.html");
-    }
 }

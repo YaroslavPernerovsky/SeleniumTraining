@@ -19,8 +19,8 @@ public class BaseTest
     }
 
     protected IWebDriver drv;
-    
-    public string DemoHtmlUrl()
+
+    protected internal static string DemoHtmlUrl()
     {
         return "file://" + Path.Combine(Environment.CurrentDirectory, @"Resources\", "Examples.html");
     }
