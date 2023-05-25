@@ -72,4 +72,21 @@ public class ImmutableInteractions : BaseTest
         Console.WriteLine("outside: " + drv.FindElement(By.Id("outside")).Displayed);
         Console.WriteLine("shifted: " + drv.FindElement(By.Id("shifted")).Displayed);
     }
+
+    [Test]
+    public void TransformationTest()
+    {
+        drv.Navigate().GoToUrl("http://css3.bradshawenterprises.com/transforms/");
+        var element = drv.FindElement(By.Id("rotate"));
+        
+        Console.WriteLine("Size: "+element.Size);
+        Console.WriteLine("Position: "+ element.Location);
+        
+        Console.WriteLine("Size: "+element.Size);
+        Console.WriteLine("Position: "+ element.Location);
+        
+        Console.WriteLine("Size: "+element.Size);
+        Console.WriteLine("Position: "+ element.Location);
+
+    }
 }
