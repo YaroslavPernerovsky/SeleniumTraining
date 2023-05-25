@@ -23,6 +23,9 @@ public class Tests
     public void Test1()
     {
         drv.Navigate().GoToUrl("https://google.com");
+        drv.FindElement(By.CssSelector("[name=q]")).SendKeys("SomeText");
         drv.FindElement(By.CssSelector("[name=q]")).SendKeys("Selenium");
+        drv.FindElement(By.CssSelector("[name=q]")).SendKeys(Keys.Home + "First");
+        drv.FindElement(By.CssSelector("[name=q]")).SendKeys("Selenium" + Keys.Enter);
     }
 }

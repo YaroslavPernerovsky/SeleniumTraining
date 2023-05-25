@@ -18,17 +18,16 @@ public class ImmutableInteractions : BaseTest
         var textInput = drv.FindElement(By.Id("text"));
 
         Console.WriteLine("GetAttr: " + textInput.GetAttribute("myAttribute"));
-        Console.WriteLine("GetAttr: " + textInput.GetAttribute("namespaceURI"));
-
-        textInput.SendKeys(Keys.Enter);
-
-        var link = drv.FindElement(By.Id("link"));
-        var select = new SelectElement(drv.FindElement(By.Name("currency_code")));
+        Console.WriteLine("GetAttr: " + textInput.GetAttribute("selectionDirection"));
 
 
         textInput.SendKeys("Test Message");
         Console.WriteLine("GetText: " + textInput.Text);
         Console.WriteLine("GetAttr: " + textInput.GetAttribute("value"));
+
+
+        var link = drv.FindElement(By.Id("link"));
+        var select = new SelectElement(drv.FindElement(By.Name("currency_code")));
 
         Console.WriteLine("GetLink: " + link.GetAttribute("href"));
 
@@ -78,15 +77,29 @@ public class ImmutableInteractions : BaseTest
     {
         drv.Navigate().GoToUrl("http://css3.bradshawenterprises.com/transforms/");
         var element = drv.FindElement(By.Id("rotate"));
-        
-        Console.WriteLine("Size: "+element.Size);
-        Console.WriteLine("Position: "+ element.Location);
-        
-        Console.WriteLine("Size: "+element.Size);
-        Console.WriteLine("Position: "+ element.Location);
-        
-        Console.WriteLine("Size: "+element.Size);
-        Console.WriteLine("Position: "+ element.Location);
 
+        Console.WriteLine("Size before: " + element.Size);
+        Console.WriteLine("Position  before: " + element.Location);
+
+        Console.WriteLine("Size after: " + element.Size);
+        Console.WriteLine("Position after: " + element.Location);
+
+        // Size before: {Width=92, Height=202}
+        // Position  before: {X=525,Y=655}
+        // Size after: {Width=92, Height=202}
+        // Position after: {X=444,Y=658}
+
+        // Size before: {Width=208, Height=208}
+        // Position  before: {X=556,Y=655}
+        // Size after: {Width=92, Height=202}
+        // Position after: {X=614,Y=658}
+    }
+
+    [Test]
+    public void BrowserPropertiesTest()
+    {
+        Console.WriteLine("Title: " + drv.Title);
+        Console.WriteLine("Url: " + drv.Url);
+        Console.WriteLine("PageHTML: " + drv.PageSource);
     }
 }
