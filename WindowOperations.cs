@@ -72,4 +72,36 @@ public class WindowOperations : BaseTest
 
         drv.FindElement(By.CssSelector("center a")).Click();
     }
+
+    [Test]
+    public void UploadTest()
+    {
+        drv.Navigate().GoToUrl($"{Environment.GetEnvironmentVariable("ENT_QA_BASE_URL")}/CorpNet/Login.aspx");
+
+        wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("username")))
+            .SendKeys(Environment.GetEnvironmentVariable("ENT_QA_USER"));
+
+        drv.FindElement(By.Id("password")).SendKeys(Environment.GetEnvironmentVariable("ENT_QA_PASS"));
+        drv.FindElement(By.Name("_companyText")).SendKeys(Environment.GetEnvironmentVariable("ENT_QA_COMPANY"));
+        drv.FindElement(By.CssSelector("input.btn.login-submit-button")).Click();
+
+        wait.Until(
+            ExpectedConditions.ElementIsVisible(By.CssSelector("div.menu-secondary ul li.menu-user a.menu-drop")));
+        
+        drv.Navigate().GoToUrl($"{Environment.GetEnvironmentVariable("ENT_QA_BASE_URL")}/corpnet/employee/myprofile.aspx");
+        
+        wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".page-actions-wrapper span.arrow"))).Click();
+        drv.FindElement(By.CssSelector("li[data-action=MainFpoQvArea_changeImage] a")).Click();
+        wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".modal .modal-footer .id-btn-save")));
+
+        
+        //Upload file
+        var path = Path.Combine(Environment.CurrentDirectory, @"Resources", "avatar.png");
+        drv.FindElement(By.CssSelector("input[type=file]")).SendKeys(path);
+
+        
+        drv.FindElement(By.CssSelector(".modal .modal-footer .id-btn-save")).Click();
+        
+    }
+
 }
