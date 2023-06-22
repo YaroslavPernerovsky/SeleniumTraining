@@ -1,5 +1,7 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Support.UI;
 
 namespace SeleniumTraining;
 
@@ -9,7 +11,10 @@ public class BaseTest
     [OneTimeSetUp]
     public void Setup()
     {
-        drv = new ChromeDriver();
+        var opt = new ChromeOptions();
+        opt.UnhandledPromptBehavior = UnhandledPromptBehavior.Ignore;
+        drv = new ChromeDriver(opt);
+        wait = new WebDriverWait(drv, TimeSpan.FromSeconds(10));
     }
 
     [OneTimeTearDown]
@@ -19,6 +24,7 @@ public class BaseTest
     }
 
     protected IWebDriver drv;
+    protected WebDriverWait wait;
 
     protected internal static string DemoHtmlUrl()
     {
