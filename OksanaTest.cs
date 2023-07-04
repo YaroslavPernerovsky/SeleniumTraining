@@ -44,7 +44,7 @@ public class OksanaTest
     }
 
     [Test]
-    public void TestWOflow()
+    public void TestWoFlow()
     {
         var pickUpComment = "Pick-Up Comment From Autotest";
         drv.Navigate()
