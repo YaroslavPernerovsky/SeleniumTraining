@@ -1,174 +1,110 @@
-using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Interactions;
-using OpenQA.Selenium.Support.UI;
-using SeleniumExtras.WaitHelpers;
 using SeleniumTraining.LayeredStructure.PageObjects;
 
 namespace SeleniumTraining.LayeredStructure.BusinessLogic;
 
 public class CorrigoEnterpriseApplication
 {
+    private readonly ApplicationContext _context;
+    private readonly FiltersPage _filtersPage;
 
-    private IWebDriver driver;
-    private WebDriverWait wait;
-    ApplicationContext context;
-
-    private LoginPage loginPage;
+    private readonly LoginPage _loginPage;
+    private readonly WoListPage _woListPage;
+    private readonly WoPage _woPage;
 
     public CorrigoEnterpriseApplication()
     {
-
-        context = new ApplicationContext();
+        _context = new ApplicationContext();
 
         var options = new ChromeOptions();
-        options.AddArguments(
-            "start-maximized"
-        );
+        options.AddArguments("start-maximized");
+        var driver = new ChromeDriver(options);
 
-        driver = new ChromeDriver(options);
-        wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5)); // Explicit Wait
 
-        context.driver = driver;
-        context.baseUrl = Environment.GetEnvironmentVariable("ENT_QA_BASE_URL");
-        context.username = Environment.GetEnvironmentVariable("ENT_QA_USER");
-        context.password = Environment.GetEnvironmentVariable("ENT_QA_PASS");
-        context.company = Environment.GetEnvironmentVariable("ENT_QA_COMPANY");
+        _context.driver = driver;
+        _context.baseUrl = Environment.GetEnvironmentVariable("ENT_QA_BASE_URL");
+        _context.username = Environment.GetEnvironmentVariable("ENT_QA_USER");
+        _context.password = Environment.GetEnvironmentVariable("ENT_QA_PASS");
+        _context.company = Environment.GetEnvironmentVariable("ENT_QA_COMPANY");
 
-        loginPage = new LoginPage(context);
+        _loginPage = new LoginPage(_context);
+        _filtersPage = new FiltersPage(_context);
+        _woListPage = new WoListPage(_context);
+        _woPage = new WoPage(_context);
     }
 
 
     public void LoginWithDefaultUser()
     {
-         loginPage.LoginWithDefaultUser();
+        _loginPage.LoginWithDefaultUser();
     }
 
 
     public void CloseApp()
     {
-        driver.Quit();
+        _context.driver.Quit();
     }
 
 
-
-
-    public string GetWoStatusFromWoList(string woNumber)
+    public void OpenWoList()
     {
-        var woStatus =
-            driver.FindElement(By.XPath(
-                    $"//td[@data-column='Number']/a[contains(text(), '{woNumber}')]/../../td[@data-column='WOStatus']"))
-                .Text;
-        return woStatus;
-    }
-
-    public void CloseWoWindow()
-    {
-        var woLink = By.XPath("//td[@data-column='WOStatus'][contains(text(), 'New')][1]/following-sibling::td/a");
-        var woLinkElement = driver.FindElement(woLink);
-        driver.FindElement(By.XPath("//button[@class='close btn-dismiss']")).Click();
-        wait.Until(ExpectedConditions.StalenessOf(woLinkElement));
-    }
-
-    public string GetActivityLogComment()
-    {
-        var comment =
-            driver.FindElement(
-                By.XPath("//*[@data-role='woactivityloggrid']//tbody//tr[1]//td[@data-column='Comment']")).Text;
-        return comment;
-    }
-
-    public string GetActivityLogActionTitle()
-    {
-        var action =
-            driver.FindElement(
-                By.XPath("//*[@data-role='woactivityloggrid']//tbody//tr[1]//td[@data-column='ActionTitle']"));
-        return action.Text;
-    }
-
-    public void PickUpWo(string pickUpComment)
-    {
-        wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".dialog-level-actions-widget .arrow")))
-            .Click();
-
-        driver.FindElement(By.CssSelector("li[data-action=MainFpoQvArea_pickUp] a")).Click();
-
-        wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//form[@class='corrigo-form']/div/textarea")))
-            .Click();
-
-        driver.FindElement(By.CssSelector("form.corrigo-form textarea")).SendKeys(pickUpComment);
-        driver.FindElement(By.CssSelector("div[data-role=woactionpickupeditdialog] button.id-btn-save")).Click();
-        var table = driver.FindElement(By.CssSelector("[data-role=woactivityloggrid] tbody"));
-        wait.Until(ExpectedConditions.StalenessOf(table));
-    }
-
-    public string OpenFirstWoFromTheList()
-    {
-        var woLink = By.XPath("//td[@data-column='WOStatus'][contains(text(), 'New')][1]/following-sibling::td/a");
-        var woLinkElement = driver.FindElement(woLink);
-        var woNumber = driver.FindElement(woLink).Text;
-
-        driver.FindElement(woLink).Click();
-
-        wait.Until(ExpectedConditions.ElementIsVisible(
-            By.XPath("//*[@data-role='woactivityloggrid']//tbody//tr[1]//td[@data-column='ActionTitle']")));
-
-        return woNumber;
-    }
-
-    public void ApplyFilters()
-    {
-        var woLink = By.XPath("//td[@data-column='WOStatus'][contains(text(), 'New')][1]/following-sibling::td/a");
-        var woLinkElement = driver.FindElement(woLink);
-
-        driver.FindElement(By.CssSelector(".filter-apply")).Click();
-
-        wait.Until(ExpectedConditions.StalenessOf(woLinkElement));
-    }
-
-    public void SetAssigneeFilterToUser()
-    {
-        driver.FindElement(By.CssSelector(".id-filter-w_AssigneeType .k-input")).Click();
-        wait.Until(ExpectedConditions.ElementIsVisible(
-            By.XPath("//div[@class='k-animation-container']//label[span[text()='- All Types -']]"))).Click();
-        driver.FindElement(By.XPath("//div[@class='k-animation-container']//label[span[contains(text(),'User')]]"))
-            .Click();
-    }
-
-    public void SetStatusFilterToNew()
-    {
-        driver.FindElement(By.CssSelector(".id-filter-w_Status .k-input")).Click();
-        wait.Until(ExpectedConditions.ElementIsVisible(
-            By.XPath("//div[@class='k-animation-container']//label[span[text()='- All Statuses -']]"))).Click();
-        driver.FindElement(By.XPath("//div[@class='k-animation-container']//label[span[text()='New']]")).Click();
-    }
-
-    public void SetNewFiltersToStatusAndAssignee()
-    {
-        driver.FindElement(By.CssSelector(".plain-actions .icon-filter")).Click();
-        wait.Until(driver => !driver.FindElements(By.XPath("//div[@class='blockUI blockOverlay']")).Any());
-        driver.FindElement(By.CssSelector("[columnid='w_Status']")).Click();
-        driver.FindElement(By.CssSelector("[columnid='w_AssigneeType']")).Click();
-        driver.FindElement(By.CssSelector(".dialog-form-buttons button.btn-primary")).Click();
+        _woListPage.Open();
     }
 
     public void CleanUpWoListFilters()
     {
-        while (driver.FindElements(
-                   By.CssSelector("div.filter-block:not([style*='display: none;']) > button.filter-remove")).Count > 0)
-            new Actions(driver)
-                .MoveToElement(driver.FindElement(
-                    By.CssSelector("div.filter-block:not([style*='display: none;']) > button.filter-remove"))).Click()
-                .Perform();
+        _woListPage.CleanUpWoListFilters();
     }
 
-    public void OpenWoList()
+    public void SetNewFiltersToStatusAndAssignee()
     {
-        driver.Navigate()
-            .GoToUrl($"{context.baseUrl}/corpnet/workorder/workorderlist.aspx");
-
-        wait.Until(driver => !driver.FindElements(By.XPath("//div[@class='blockUI blockOverlay']")).Any());
+        _filtersPage.Open();
+        _filtersPage.SetNewFiltersToStatusAndAssignee();
+        _filtersPage.Close();
     }
 
+    public void SetStatusFilterToNew()
+    {
+        _woListPage.SetStatusFilterToNew();
+    }
 
+    public void SetAssigneeFilterToUser()
+    {
+        _woListPage.SetAssigneeFilterToUser();
+    }
+
+    public void ApplyFilters()
+    {
+        _woListPage.ApplyFilters();
+    }
+
+    public string OpenFirstWoFromTheList()
+    {
+        return _woListPage.OpenFirstWoFromTheList();
+    }
+
+    public void PickUpWo(string pickUpComment)
+    {
+        _woPage.PickUpWo(pickUpComment);
+    }
+
+    public string GetActivityLogActionTitle()
+    {
+        return _woPage.GetActivityLogActionTitle();
+    }
+
+    public string GetActivityLogComment()
+    {
+        return _woPage.GetActivityLogComment();
+    }
+
+    public void CloseWoWindow()
+    {
+        _woPage.Close();
+    }
+
+    public string GetWoStatusFromWoList(string woNumber)
+    {
+        return _woListPage.GetWoStatusFromWoList(woNumber);
+    }
 }
