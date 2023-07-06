@@ -11,10 +11,12 @@ public class CorrigoEnterpriseApplication
     
     private IWebDriver driver;
     private WebDriverWait wait;
-    ApplicationContext context = new ApplicationContext();
+    ApplicationContext context; 
 
     public CorrigoEnterpriseApplication()
     {
+
+        context = new ApplicationContext();
         
         var options = new ChromeOptions();
         options.AddArguments(
