@@ -34,9 +34,10 @@ public class CorrigoEnterpriseApplication
     }
 
 
-    public void LoginWithDefaultUser()
+    public CorrigoEnterpriseApplication LoginWithDefaultUser()
     {
         _loginPage.LoginWithDefaultUser();
+        return this;
     }
 
 
@@ -46,36 +47,42 @@ public class CorrigoEnterpriseApplication
     }
 
 
-    public void OpenWoList()
+    public CorrigoEnterpriseApplication OpenWoList()
     {
         _woListPage.Open();
+        return this;
     }
 
-    public void CleanUpWoListFilters()
+    public CorrigoEnterpriseApplication CleanUpWoListFilters()
     {
         _woListPage.CleanUpWoListFilters();
+        return this;
     }
 
-    public void SetNewFiltersToStatusAndAssignee()
+    public CorrigoEnterpriseApplication SetNewFiltersToStatusAndAssignee()
     {
         _filtersPage.Open();
         _filtersPage.SetNewFiltersToStatusAndAssignee();
         _filtersPage.Close();
+        return this;
     }
 
-    public void SetStatusFilterToNew()
+    public CorrigoEnterpriseApplication SetStatusFilterToNew()
     {
         _woListPage.SetStatusFilterToNew();
+        return this;
     }
 
-    public void SetAssigneeFilterToUser()
+    public CorrigoEnterpriseApplication SetAssigneeFilterToUser()
     {
         _woListPage.SetAssigneeFilterToUser();
+        return this;
     }
 
-    public void ApplyFilters()
+    public CorrigoEnterpriseApplication ApplyFilters()
     {
         _woListPage.ApplyFilters();
+        return this;
     }
 
     public string OpenFirstWoFromTheList()
@@ -83,9 +90,10 @@ public class CorrigoEnterpriseApplication
         return _woListPage.OpenFirstWoFromTheList();
     }
 
-    public void PickUpWo(string pickUpComment)
+    public CorrigoEnterpriseApplication PickUpWo(string pickUpComment)
     {
         _woPage.PickUpWo(pickUpComment);
+        return this;
     }
 
     public string GetActivityLogActionTitle()
@@ -98,9 +106,10 @@ public class CorrigoEnterpriseApplication
         return _woPage.GetActivityLogComment();
     }
 
-    public void CloseWoWindow()
+    public CorrigoEnterpriseApplication CloseWoWindow()
     {
         _woPage.Close();
+        return this;
     }
 
     public string GetWoStatusFromWoList(string woNumber)

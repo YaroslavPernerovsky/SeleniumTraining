@@ -5,8 +5,6 @@ namespace SeleniumTraining.LayeredStructure;
 [TestFixture]
 public class SearchAndPickUpNewWoTest
 {
-    private CorrigoEnterpriseApplication app;
-    
     [OneTimeSetUp]
     public void OneTimeSetup()
     {
@@ -19,18 +17,20 @@ public class SearchAndPickUpNewWoTest
         app.CloseApp();
     }
 
+    private CorrigoEnterpriseApplication app;
+
     [Test]
     public void SearchAndPickupWo()
     {
         const string pickUpComment = "Autotest";
 
-        app.LoginWithDefaultUser();
-        app.OpenWoList();
-        app.CleanUpWoListFilters();
-        app.SetNewFiltersToStatusAndAssignee();
-        app.SetStatusFilterToNew();
-        app.SetAssigneeFilterToUser();
-        app.ApplyFilters();
+        app.LoginWithDefaultUser()
+            .OpenWoList()
+            .CleanUpWoListFilters()
+            .SetNewFiltersToStatusAndAssignee()
+            .SetStatusFilterToNew()
+            .SetAssigneeFilterToUser()
+            .ApplyFilters();
 
         var woNumber = app.OpenFirstWoFromTheList();
 
