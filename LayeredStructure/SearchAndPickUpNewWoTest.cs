@@ -19,7 +19,7 @@ public class SearchAndPickUpNewWoTest
 
         driver = new ChromeDriver(options);
         wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5)); // Explicit Wait
-
+//Login with default user
         driver.Navigate().GoToUrl(Environment.GetEnvironmentVariable("ENT_QA_BASE_URL") + "/corpnet/Login.aspx");
         driver.FindElement(By.Name("username")).SendKeys(Environment.GetEnvironmentVariable("ENT_QA_USER"));
         driver.FindElement(By.Name("password")).SendKeys(Environment.GetEnvironmentVariable("ENT_QA_PASS"));
@@ -28,6 +28,7 @@ public class SearchAndPickUpNewWoTest
         wait.Until(
             ExpectedConditions.ElementIsVisible(By.CssSelector("div.menu-secondary ul li.menu-user a.menu-drop")));
     }
+
 
     [OneTimeTearDown]
     public void OneTimeTearDown()
@@ -43,11 +44,13 @@ public class SearchAndPickUpNewWoTest
     {
         const string pickUpComment = "Autotest";
 
+//open WO List 
         driver.Navigate()
             .GoToUrl($"{Environment.GetEnvironmentVariable("ENT_QA_BASE_URL")}/corpnet/workorder/workorderlist.aspx");
 
         wait.Until(driver => !driver.FindElements(By.XPath("//div[@class='blockUI blockOverlay']")).Any());
 
+//cleanup all filters
         while (driver.FindElements(
                    By.CssSelector("div.filter-block:not([style*='display: none;']) > button.filter-remove")).Count > 0)
             new Actions(driver)
@@ -55,15 +58,20 @@ public class SearchAndPickUpNewWoTest
                     By.CssSelector("div.filter-block:not([style*='display: none;']) > button.filter-remove"))).Click()
                 .Perform();
 
+//select status and assigned filters only
         driver.FindElement(By.CssSelector(".plain-actions .icon-filter")).Click();
         wait.Until(driver => !driver.FindElements(By.XPath("//div[@class='blockUI blockOverlay']")).Any());
         driver.FindElement(By.CssSelector("[columnid='w_Status']")).Click();
         driver.FindElement(By.CssSelector("[columnid='w_AssigneeType']")).Click();
         driver.FindElement(By.CssSelector(".dialog-form-buttons button.btn-primary")).Click();
+
+//set status filter to New        
         driver.FindElement(By.CssSelector(".id-filter-w_Status .k-input")).Click();
         wait.Until(ExpectedConditions.ElementIsVisible(
             By.XPath("//div[@class='k-animation-container']//label[span[text()='- All Statuses -']]"))).Click();
         driver.FindElement(By.XPath("//div[@class='k-animation-container']//label[span[text()='New']]")).Click();
+
+//set assigned filter to User        
         driver.FindElement(By.CssSelector(".id-filter-w_AssigneeType .k-input")).Click();
         wait.Until(ExpectedConditions.ElementIsVisible(
             By.XPath("//div[@class='k-animation-container']//label[span[text()='- All Types -']]"))).Click();
@@ -77,12 +85,14 @@ public class SearchAndPickUpNewWoTest
 
         wait.Until(ExpectedConditions.StalenessOf(woLinkElement));
 
+//open first WO        
         woLinkElement = driver.FindElement(woLink);
 
         var woNumber = driver.FindElement(woLink).Text;
 
         driver.FindElement(woLink).Click();
 
+//Pick-up WO        
         wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".dialog-level-actions-widget .arrow")))
             .Click();
 
@@ -95,6 +105,7 @@ public class SearchAndPickUpNewWoTest
         var table = driver.FindElement(By.CssSelector("[data-role=woactivityloggrid] tbody"));
         wait.Until(ExpectedConditions.StalenessOf(table));
 
+//Verify that New record added to log after pickup        
         var action =
             driver.FindElement(
                 By.XPath("//*[@data-role='woactivityloggrid']//tbody//tr[1]//td[@data-column='ActionTitle']"));
@@ -105,9 +116,11 @@ public class SearchAndPickUpNewWoTest
                 By.XPath("//*[@data-role='woactivityloggrid']//tbody//tr[1]//td[@data-column='Comment']"));
         Assert.That(comment.Text, Is.EqualTo(pickUpComment));
 
+//Close WO window        
         driver.FindElement(By.XPath("//button[@class='close btn-dismiss']")).Click();
         wait.Until(ExpectedConditions.StalenessOf(woLinkElement));
 
+//Verify that WO status has been changed in the WO list        
         var woStatus =
             driver.FindElement(By.XPath(
                 $"//td[@data-column='Number']/a[contains(text(), '{woNumber}')]/../../td[@data-column='WOStatus']"));
