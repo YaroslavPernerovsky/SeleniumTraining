@@ -11,9 +11,11 @@ public class CorrigoEnterpriseApplication
     
     private IWebDriver driver;
     private WebDriverWait wait;
+    ApplicationContext context = new ApplicationContext();
 
     public CorrigoEnterpriseApplication()
     {
+        
         var options = new ChromeOptions();
         options.AddArguments(
             "start-maximized"
@@ -21,6 +23,12 @@ public class CorrigoEnterpriseApplication
 
         driver = new ChromeDriver(options);
         wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5)); // Explicit Wait
+        
+        context.driver = driver;
+        context.baseUrl = Environment.GetEnvironmentVariable("ENT_QA_BASE_URL");
+        context.username = Environment.GetEnvironmentVariable("ENT_QA_USER");
+        context.password = Environment.GetEnvironmentVariable("ENT_QA_PASS");
+        context.company = Environment.GetEnvironmentVariable("ENT_QA_COMPANY");
     }
 
     public void CloseApp()
@@ -31,10 +39,10 @@ public class CorrigoEnterpriseApplication
 
     public void LoginWithDefaultUser()
     {
-        driver.Navigate().GoToUrl(Environment.GetEnvironmentVariable("ENT_QA_BASE_URL") + "/corpnet/Login.aspx");
-        driver.FindElement(By.Name("username")).SendKeys(Environment.GetEnvironmentVariable("ENT_QA_USER"));
-        driver.FindElement(By.Name("password")).SendKeys(Environment.GetEnvironmentVariable("ENT_QA_PASS"));
-        driver.FindElement(By.Name("_companyText")).SendKeys(Environment.GetEnvironmentVariable("ENT_QA_COMPANY"));
+        driver.Navigate().GoToUrl( context.baseUrl + "/corpnet/Login.aspx");
+        driver.FindElement(By.Name("username")).SendKeys(context.username);
+        driver.FindElement(By.Name("password")).SendKeys(context.password);
+        driver.FindElement(By.Name("_companyText")).SendKeys(context.company);
         driver.FindElement(By.CssSelector(".login-submit-button")).Click();
         wait.Until(
             ExpectedConditions.ElementIsVisible(By.CssSelector("div.menu-secondary ul li.menu-user a.menu-drop")));
@@ -152,7 +160,7 @@ public class CorrigoEnterpriseApplication
      public void OpenWoList()
     {
         driver.Navigate()
-            .GoToUrl($"{Environment.GetEnvironmentVariable("ENT_QA_BASE_URL")}/corpnet/workorder/workorderlist.aspx");
+            .GoToUrl($"{context.baseUrl}/corpnet/workorder/workorderlist.aspx");
 
         wait.Until(driver => !driver.FindElements(By.XPath("//div[@class='blockUI blockOverlay']")).Any());
     }
