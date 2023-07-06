@@ -54,7 +54,7 @@ public class SearchAndPickUpNewWoTest
         SetNewFiltersToStatusAndAssignee();
         SetStatusFilterToNew();
         SetAssigneeFilterToUser();
-        CloseFiltersWindow();
+        ApplyFilters();
 
         var woNumber = OpenFirstWoFromTheList();
 
@@ -110,6 +110,7 @@ public class SearchAndPickUpNewWoTest
             .Click();
 
         driver.FindElement(By.CssSelector("li[data-action=MainFpoQvArea_pickUp] a")).Click();
+
         wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//form[@class='corrigo-form']/div/textarea")))
             .Click();
 
@@ -126,10 +127,14 @@ public class SearchAndPickUpNewWoTest
         var woNumber = driver.FindElement(woLink).Text;
 
         driver.FindElement(woLink).Click();
+
+        wait.Until(ExpectedConditions.ElementIsVisible(
+            By.XPath("//*[@data-role='woactivityloggrid']//tbody//tr[1]//td[@data-column='ActionTitle']")));
+
         return woNumber;
     }
 
-    private void CloseFiltersWindow()
+    private void ApplyFilters()
     {
         var woLink = By.XPath("//td[@data-column='WOStatus'][contains(text(), 'New')][1]/following-sibling::td/a");
         var woLinkElement = driver.FindElement(woLink);
