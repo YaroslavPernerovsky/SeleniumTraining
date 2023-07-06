@@ -6,9 +6,9 @@ namespace SeleniumTraining.LayeredStructure.PageObjects;
 
 public abstract class BasePage
 {
-    private ApplicationContext context;
-    private readonly IWebDriver driver;
-    private WebDriverWait wait;
+    protected ApplicationContext context;
+    protected readonly IWebDriver driver;
+    protected WebDriverWait wait;
 
     protected BasePage(ApplicationContext context)
     {

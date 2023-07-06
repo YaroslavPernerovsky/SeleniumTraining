@@ -3,21 +3,24 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
+using SeleniumTraining.LayeredStructure.PageObjects;
 
 namespace SeleniumTraining.LayeredStructure.BusinessLogic;
 
 public class CorrigoEnterpriseApplication
 {
-    
+
     private IWebDriver driver;
     private WebDriverWait wait;
-    ApplicationContext context; 
+    ApplicationContext context;
+
+    private LoginPage loginPage;
 
     public CorrigoEnterpriseApplication()
     {
 
         context = new ApplicationContext();
-        
+
         var options = new ChromeOptions();
         options.AddArguments(
             "start-maximized"
@@ -25,13 +28,22 @@ public class CorrigoEnterpriseApplication
 
         driver = new ChromeDriver(options);
         wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5)); // Explicit Wait
-        
+
         context.driver = driver;
         context.baseUrl = Environment.GetEnvironmentVariable("ENT_QA_BASE_URL");
         context.username = Environment.GetEnvironmentVariable("ENT_QA_USER");
         context.password = Environment.GetEnvironmentVariable("ENT_QA_PASS");
         context.company = Environment.GetEnvironmentVariable("ENT_QA_COMPANY");
+
+        loginPage = new LoginPage(context);
     }
+
+
+    public void LoginWithDefaultUser()
+    {
+         loginPage.LoginWithDefaultUser();
+    }
+
 
     public void CloseApp()
     {
@@ -39,18 +51,9 @@ public class CorrigoEnterpriseApplication
     }
 
 
-    public void LoginWithDefaultUser()
-    {
-        driver.Navigate().GoToUrl( context.baseUrl + "/corpnet/Login.aspx");
-        driver.FindElement(By.Name("username")).SendKeys(context.username);
-        driver.FindElement(By.Name("password")).SendKeys(context.password);
-        driver.FindElement(By.Name("_companyText")).SendKeys(context.company);
-        driver.FindElement(By.CssSelector(".login-submit-button")).Click();
-        wait.Until(
-            ExpectedConditions.ElementIsVisible(By.CssSelector("div.menu-secondary ul li.menu-user a.menu-drop")));
-    }
-    
-     public string GetWoStatusFromWoList(string woNumber)
+
+
+    public string GetWoStatusFromWoList(string woNumber)
     {
         var woStatus =
             driver.FindElement(By.XPath(
@@ -59,7 +62,7 @@ public class CorrigoEnterpriseApplication
         return woStatus;
     }
 
-     public void CloseWoWindow()
+    public void CloseWoWindow()
     {
         var woLink = By.XPath("//td[@data-column='WOStatus'][contains(text(), 'New')][1]/following-sibling::td/a");
         var woLinkElement = driver.FindElement(woLink);
@@ -67,7 +70,7 @@ public class CorrigoEnterpriseApplication
         wait.Until(ExpectedConditions.StalenessOf(woLinkElement));
     }
 
-     public string GetActivityLogComment()
+    public string GetActivityLogComment()
     {
         var comment =
             driver.FindElement(
@@ -75,7 +78,7 @@ public class CorrigoEnterpriseApplication
         return comment;
     }
 
-     public string GetActivityLogActionTitle()
+    public string GetActivityLogActionTitle()
     {
         var action =
             driver.FindElement(
@@ -83,7 +86,7 @@ public class CorrigoEnterpriseApplication
         return action.Text;
     }
 
-     public void PickUpWo(string pickUpComment)
+    public void PickUpWo(string pickUpComment)
     {
         wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".dialog-level-actions-widget .arrow")))
             .Click();
@@ -99,7 +102,7 @@ public class CorrigoEnterpriseApplication
         wait.Until(ExpectedConditions.StalenessOf(table));
     }
 
-     public string OpenFirstWoFromTheList()
+    public string OpenFirstWoFromTheList()
     {
         var woLink = By.XPath("//td[@data-column='WOStatus'][contains(text(), 'New')][1]/following-sibling::td/a");
         var woLinkElement = driver.FindElement(woLink);
@@ -113,7 +116,7 @@ public class CorrigoEnterpriseApplication
         return woNumber;
     }
 
-     public void ApplyFilters()
+    public void ApplyFilters()
     {
         var woLink = By.XPath("//td[@data-column='WOStatus'][contains(text(), 'New')][1]/following-sibling::td/a");
         var woLinkElement = driver.FindElement(woLink);
@@ -123,7 +126,7 @@ public class CorrigoEnterpriseApplication
         wait.Until(ExpectedConditions.StalenessOf(woLinkElement));
     }
 
-     public void SetAssigneeFilterToUser()
+    public void SetAssigneeFilterToUser()
     {
         driver.FindElement(By.CssSelector(".id-filter-w_AssigneeType .k-input")).Click();
         wait.Until(ExpectedConditions.ElementIsVisible(
@@ -132,7 +135,7 @@ public class CorrigoEnterpriseApplication
             .Click();
     }
 
-     public void SetStatusFilterToNew()
+    public void SetStatusFilterToNew()
     {
         driver.FindElement(By.CssSelector(".id-filter-w_Status .k-input")).Click();
         wait.Until(ExpectedConditions.ElementIsVisible(
@@ -140,7 +143,7 @@ public class CorrigoEnterpriseApplication
         driver.FindElement(By.XPath("//div[@class='k-animation-container']//label[span[text()='New']]")).Click();
     }
 
-     public void SetNewFiltersToStatusAndAssignee()
+    public void SetNewFiltersToStatusAndAssignee()
     {
         driver.FindElement(By.CssSelector(".plain-actions .icon-filter")).Click();
         wait.Until(driver => !driver.FindElements(By.XPath("//div[@class='blockUI blockOverlay']")).Any());
@@ -149,7 +152,7 @@ public class CorrigoEnterpriseApplication
         driver.FindElement(By.CssSelector(".dialog-form-buttons button.btn-primary")).Click();
     }
 
-     public void CleanUpWoListFilters()
+    public void CleanUpWoListFilters()
     {
         while (driver.FindElements(
                    By.CssSelector("div.filter-block:not([style*='display: none;']) > button.filter-remove")).Count > 0)
@@ -159,14 +162,13 @@ public class CorrigoEnterpriseApplication
                 .Perform();
     }
 
-     public void OpenWoList()
+    public void OpenWoList()
     {
         driver.Navigate()
             .GoToUrl($"{context.baseUrl}/corpnet/workorder/workorderlist.aspx");
 
         wait.Until(driver => !driver.FindElements(By.XPath("//div[@class='blockUI blockOverlay']")).Any());
     }
-    
-    
-    
+
+
 }
