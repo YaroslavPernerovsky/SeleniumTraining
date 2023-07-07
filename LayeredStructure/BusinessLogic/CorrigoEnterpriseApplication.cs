@@ -14,18 +14,16 @@ public class CorrigoEnterpriseApplication
 
     public CorrigoEnterpriseApplication()
     {
-        _context = new ApplicationContext();
+        var driver = new ChromeDriver();
 
-        var options = new ChromeOptions();
-        options.AddArguments("start-maximized");
-        var driver = new ChromeDriver(options);
-
-
-        _context.driver = driver;
-        _context.baseUrl = Environment.GetEnvironmentVariable("ENT_QA_BASE_URL");
-        _context.username = Environment.GetEnvironmentVariable("ENT_QA_USER");
-        _context.password = Environment.GetEnvironmentVariable("ENT_QA_PASS");
-        _context.company = Environment.GetEnvironmentVariable("ENT_QA_COMPANY");
+        _context = new ApplicationContext
+        {
+            Driver = driver,
+            BaseUrl = Environment.GetEnvironmentVariable("ENT_QA_BASE_URL")!,
+            Username = Environment.GetEnvironmentVariable("ENT_QA_USER")!,
+            Password = Environment.GetEnvironmentVariable("ENT_QA_PASS")!,
+            Company = Environment.GetEnvironmentVariable("ENT_QA_COMPANY")!
+        };
 
         _loginPage = new LoginPage(_context);
         _filtersPage = new FiltersPage(_context);
@@ -43,7 +41,7 @@ public class CorrigoEnterpriseApplication
 
     public void CloseApp()
     {
-        _context.driver.Quit();
+        _context.Driver.Quit();
     }
 
 

@@ -6,15 +6,15 @@ namespace SeleniumTraining.LayeredStructure.PageObjects;
 
 public abstract class BasePage
 {
-    protected ApplicationContext context;
-    protected readonly IWebDriver driver;
-    protected WebDriverWait wait;
+    protected readonly ApplicationContext Context;
+    protected readonly IWebDriver Driver;
+    protected readonly WebDriverWait Wait;
 
     protected BasePage(ApplicationContext context)
     {
-        this.context = context;
-        driver = context.driver;
-        wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+        this.Context = context;
+        Driver = context.Driver;
+        Wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10));
     }
     
 }

@@ -4,10 +4,9 @@ namespace SeleniumTraining.LayeredStructure.BusinessLogic;
 
 public record ApplicationContext
 {
-    public IWebDriver driver { get; set;}
-    public string baseUrl { get; set;}
-    public string username { get; set;}
-    public string password { get; set;}
-    public string company { get; set;}
-
+    public IWebDriver Driver { get; set;} = null!;
+    public string BaseUrl { get; set;} = null!;
+    public string Username { get; set;} = null!;
+    public string Password { get; set;} = null!;
+    public string Company { get; set;} = null!;
 }
